@@ -1,0 +1,8 @@
+Django>=5.2,<6
+psycopg2-binary
+pillow
+python-dotenv
+django-extensions
+requests
+django-crontab
+django-meta

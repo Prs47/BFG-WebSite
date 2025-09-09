@@ -1,0 +1,10 @@
+سلام،
+
+قیمت {{ product.name }} به {{ product.current_price }} رسید.
+این همون قیمتیه که شما تعیین کرده بودید ({{ target_price }}).
+
+برای دیدن محصول کلیک کنید:
+{{ product.get_absolute_url }}
+
+با احترام،
+تیم BFG

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load blog_schema_tags %}   {# یا اسمی که فایل templatetags بلاگت دارد #}
+
+{% block title %}{{ post.meta_title|default:post.title }}{% endblock %}
+{% block meta_description %}{{ post.meta_description|default:post.summary }}{% endblock %}
+
+{% block extra_head %}
+  {% comment %} json-ld برای مقاله {% endcomment %}
+  {% article_jsonld post %}
+{% endblock %}
+
+{% block content %}
+<article>
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.published_at|date:"Y/m/d" }}</p>
+  <div>{{ post.content|linebreaks }}</div>
+</article>
+{% endblock %}

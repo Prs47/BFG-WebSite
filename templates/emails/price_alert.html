@@ -1,0 +1,9 @@
+<html>
+  <body>
+    <p>سلام،</p>
+    <p>قیمت <strong>{{ product.name }}</strong> به <strong>{{ product.current_price }}</strong> رسید.</p>
+    <p>این همون قیمتیه که شما تعیین کرده بودید ({{ target_price }}).</p>
+    <p><a href="{{ product.get_absolute_url }}">مشاهده محصول</a></p>
+    <p>با احترام، تیم BFG</p>
+  </body>
+</html>

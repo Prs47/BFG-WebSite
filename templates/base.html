@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Title (only one block with name "title") -->
+  <title>{% block title %}{{ site_settings.site_name|default:"BFGWebSite" }}{% endblock %}</title>
+
+  <!-- Meta description (override in child templates) -->
+  <meta name="description" content="{% block meta_description %}{{ site_settings.meta_default_description|default:'' }}{% endblock %}">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+  <!-- Open Graph title (separate block, independent of `title`) -->
+  <meta property="og:locale" content="fa_IR" />
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+  <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name|default:"BFGWebSite" }}{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}{{ site_settings.meta_default_description|default:'' }}{% endblock %}" />
+
+  {% block extra_head %}{% endblock %}
+  <!-- Google Analytics 4 -->
+  {% if GA_MEASUREMENT_ID %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_MEASUREMENT_ID }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ GA_MEASUREMENT_ID }}');
+  </script>
+  {% endif %}
+</head>
+<body>
+  <header>
+    <h1><a href="{% url 'core:home' %}">{{ site_settings.site_name|default:"BFGWebSite" }}</a></h1>
+    <nav>
+      <a href="{% url 'products:category_list' %}">محصولات</a> |
+      <a href="{% url 'blog:blog_list' %}">بلاگ</a> |
+      <a href="{% url 'core:about' %}">درباره ما</a> |
+      <a href="{% url 'core:contact' %}">تماس</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>{{ site_settings.phone }} | {{ site_settings.address }}</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}دسته‌بندی محصولات - BFGWebSite{% endblock %}
+{% block content %}
+<h1>دسته‌بندی محصولات</h1>
+<ul>
+  {% for c in categories %}
+    <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

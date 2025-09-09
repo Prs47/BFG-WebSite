@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}درباره ما - {{ site_settings.site_name|default:"BFGWebSite" }}{% endblock %}
+{% block content %}
+<h1>درباره {{ site_settings.site_name|default:"BFGWebSite" }}</h1>
+<p>آدرس: {{ site_settings.address }}</p>
+<p>تلفن: {{ site_settings.phone }}</p>
+<div>
+  {% if site_settings.google_map_embed %}
+    <h3>موقعیت روی نقشه</h3>
+    <div class="map-embed">
+      {{ site_settings.google_map_embed|safe }}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

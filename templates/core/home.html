@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}خانه - BFGWebSite{% endblock %}
+{% block content %}
+<h1>خوش آمدید به BFGWebSite</h1>
+
+<section>
+  <h2>قیمت روز محصولات</h2>
+  <ul>
+    {% for p in products %}
+      <li>
+        <a href="{{ p.get_absolute_url }}">{{ p.name }}</a> — {{ p.current_price }} تومان
+      </li>
+    {% empty %}
+      <li>فعلاً محصولی موجود نیست.</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h2>آخرین مقالات</h2>
+  <ul>
+    {% for post in posts %}
+      <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
