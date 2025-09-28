@@ -1,0 +1,224 @@
+{# templates/products/alert_form.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ثبت هشدار قیمت — {% if selected_product %}{{ selected_product.name }}{% else %}ثبت هشدار{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width:900px;margin:40px auto;padding:16px; overflow: visible;">
+  <div class="max-w-7xl mx-auto px-4 py-8" style="overflow: visible;">
+    <h1 class="text-2xl font-bold mb-4">هشدار قیمت</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="overflow: visible;">
+
+  <form id="alert-form" method="post" action="{% url 'products:alert_create' %}">
+    {% csrf_token %}
+
+    {# client_id گوگل (از کوکی _ga) #}
+    <input type="hidden" name="ga_client_id" id="ga_client_id" value="">
+
+    {# اگر محصول از قبل انتخاب شده است (از لینک صفحه محصول) نمایش و hidden field #}
+    {% if selected_product %}
+      <div style="margin:12px 0;">
+        <label>محصول انتخاب‌شده:</label>
+        <div style="padding:8px 12px;border:1px solid #eee;border-radius:6px;margin-top:6px;">
+          <strong>{{ selected_product.name }}</strong>
+          <div style="color:#666;font-size:0.9em;">کد: {{ selected_product.slug }}</div>
+        </div>
+        <input type="hidden" name="product_slug" value="{{ selected_product.slug }}">
+      </div>
+    {% else %}
+      {# نمایش لیست محصولات برای انتخاب کاربر (progressive enhancement) #}
+      <div style="margin:12px 0; position: relative;">
+        <label for="id_product_slug">انتخاب محصول</label><br>
+        <select name="product_slug"
+                id="id_product_slug"
+                required
+                style="padding:8px;min-width:250px;"
+                class="js-product-select"
+                data-placeholder="— انتخاب کنید —">
+          <option value="">— انتخاب کنید —</option>
+          {% for p in products_list %}
+            <option value="{{ p.slug }}" data-price="{{ p.current_price|floatformat:0 }}" data-unit="{{ p.unit }}">{{ p.name }}</option>
+          {% endfor %}
+        </select>
+        {% if form.product_slug.errors %}<div style="color:#b00">{{ form.product_slug.errors }}</div>{% endif %}
+      </div>
+    {% endif %}
+
+    <div style="margin:12px 0;">
+      <label for="id_contact">ایمیل یا شماره تماس (برای اطلاع‌رسانی)</label><br>
+      {{ form.contact }}
+      {% if form.contact.errors %}<div style="color:#b00">{{ form.contact.errors }}</div>{% endif %}
+    </div>
+
+    <div style="margin:12px 0;">
+      <label for="id_contact_method">روش تماس</label><br>
+      {{ form.contact_method }}
+      {% if form.contact_method.errors %}<div style="color:#b00">{{ form.contact_method.errors }}</div>{% endif %}
+    </div>
+
+    <div style="margin:12px 0;">
+      <label for="id_target_price">قیمت هدف (به ریال)</label><br>
+      {{ form.target_price }}
+      {% if form.target_price.errors %}<div style="color:#b00">{{ form.target_price.errors }}</div>{% endif %}
+    </div>
+
+    <div style="margin:18px 0;">
+      <button id="alert-submit" type="submit" class="btn">ثبت هشدار</button>
+    </div>
+
+    {% if form.non_field_errors %}<div style="color:#b00">{{ form.non_field_errors }}</div>{% endif %}
+  </form>
+</div>
+
+{# ===== CSS اصلاح شده برای dropdown صحیح TomSelect ===== #}
+<style>
+/* اطمینان از اینکه کانتینرها overflow:visible دارند تا منو قابل مشاهده باشد */
+.container, .max-w-7xl, .grid { overflow: visible !important; }
+
+/* کنترل TomSelect (محل قرار گرفتن کنترل) */
+.ts-control {
+  position: relative; /* تا dropdown بتواند absolute نسبت به آن قرار بگیرد */
+  z-index: 1;         /* پایه برای کنترل، منو با z-index بالاتر قرار می‌گیرد */
+}
+
+/* ورودی داخل کنترل */
+.ts-control .ts-input {
+  background: transparent;
+  color: inherit;
+}
+
+/* منوی dropdown باید کاملاً روی سایر المان‌ها قرار بگیرد */
+.ts-dropdown {
+  position: absolute !important;
+  left: 0 !important;
+  top: 100% !important;
+  width: 100% !important;
+  z-index: 99999 !important;
+  background: var(--site-bg-dark, #121212) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  border-radius: 8px;
+  margin-top: 8px;
+  box-sizing: border-box;
+  max-height: 320px;
+  overflow: auto;
+  padding: 4px 0;
+}
+
+/* آیتم‌های لیست */
+.ts-dropdown .ts-option {
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: block;
+  clear: both;
+  white-space: normal;
+}
+
+/* hover و active */
+.ts-dropdown .ts-option:hover, .ts-dropdown .ts-option.ts-focus {
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+}
+
+/* متن کوچک در گزینه‌ها (قیمت/واحد) */
+.ts-dropdown .ts-small {
+  display: block;
+  font-size: 0.85rem;
+  opacity: .85;
+  margin-top: 4px;
+}
+
+/* اگر به هر دلیلی dropdown داخل overflow: hidden کانتینر قرار گرفت، نمی‌خواهیم محتوا برش بخورد */
+html, body { overflow-x: hidden; }
+
+/* خوانایی ورودی‌ها (همان بازنشانی که قبلاً استفاده کردیم) */
+input.price-input, input[name="target_price"], input[name="contact"] {
+  color: #121212 !important;
+  opacity: 1 !important;
+}
+</style>
+
+<!-- اگه Tom Select را در base لود نکردی، این خطوط را در بالای فایل base.html یا همینجا uncomment کن: -->
+<!--
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+-->
+
+{# === Init TomSelect (بدون تغییر منطق فرم) === #}
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const sel = document.getElementById('id_product_slug');
+  if (!sel) return;
+
+  if (typeof TomSelect === 'undefined') return; // fallback: native select
+
+  if (sel.tomselect) return;
+
+  const ts = new TomSelect(sel, {
+    valueField: "value",
+    labelField: "text",
+    searchField: ["text"],
+    preload: true,
+    loadThrottle: 250,
+    load: function(query, callback) {
+      const url = '/api/product-search/?q=' + encodeURIComponent(query || '');
+      fetch(url)
+        .then(r => r.json())
+        .then(json => callback(json))
+        .catch(()=> callback());
+    },
+    render: {
+      option: function(item, escape) {
+        const price = item.price ? new Intl.NumberFormat('en-US').format(item.price) + ' ریال' : '';
+        const unit = item.unit ? ' • ' + escape(item.unit) : '';
+        // text should be safe-escaped by escape()
+        return `<div>${escape(item.text)}<div class="ts-small">${price}${unit}</div></div>`;
+      },
+      item: function(item, escape) {
+        return `<div>${escape(item.text)}</div>`;
+      }
+    },
+    onChange: function(value) {
+      // keep minimal: no additional UI updates here
+      return;
+    }
+  });
+
+  sel.tomselect = ts;
+
+  // if server preselected a value, ensure TomSelect reflects it
+  if (sel.value) ts.setValue(sel.value);
+});
+</script>
+
+<script>
+/* گرفتن کوکی _ga و قرار دادن در hidden input */
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+document.addEventListener('DOMContentLoaded', function(){
+  const cid = getCookie('_ga') || '';
+  const el = document.getElementById('ga_client_id');
+  if (el) el.value = cid;
+});
+
+/* ارسال ایونت کلاینتی به GA هنگام submit (اختیاری و غیرمسدودکننده) */
+document.getElementById('alert-form').addEventListener('submit', function(e){
+  try {
+    if (typeof gtag === 'function') {
+      const form = document.getElementById('alert-form');
+      const productSlug = (form.querySelector('input[name="product_slug"]') || form.querySelector('select[name="product_slug"]')).value || '';
+      const targetPrice = form.querySelector('[name="target_price"]') ? Number(form.querySelector('[name="target_price"]').value || 0) : 0;
+      gtag('event','alert_create_client', {
+        product_id: productSlug,
+        target_price: targetPrice
+      });
+    }
+  } catch(err) {
+    // silent
+  }
+});
+</script>
+{% endblock %}

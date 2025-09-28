@@ -4,8 +4,7 @@ from django.urls import reverse
 
 UNIT_CHOICES = [
     ('kg', 'کیلوگرم'),
-    ('m', 'متر'),
-    ('pcs', 'عدد'),
+    ('branch', 'شاخه'),
 ]
 
 class Category(models.Model):
@@ -31,7 +30,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=300, unique=True)
     description = models.TextField(blank=True)
     unit = models.CharField(max_length=10, choices=UNIT_CHOICES, default='kg')
-    current_price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    current_price = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d/', blank=True, null=True)
     image_alt = models.CharField(max_length=250, blank=True, help_text="ALT متن برای سئو")
     is_active = models.BooleanField(default=True)

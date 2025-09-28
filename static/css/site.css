@@ -1,0 +1,486 @@
+/* static/css/site.css -- اوررایدهای سبک و فونت */
+/* top of static/css/site.css */
+/* robust @font-face for Vazir + fallbacks */
+@font-face {
+  font-family: 'vazir'; /* use lowercase name because templates/JS sometimes use 'vazir' */
+  src: local('Vazir'),
+       local('vazir'),
+       local('Vazirmatn'),
+       local('Vazirmatn Regular'),
+       url('/static/fonts/vazir.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* also register capitalized name to be safe */
+@font-face {
+  font-family: 'Vazir';
+  src: local('Vazir'),
+       local('vazir'),
+       url('/static/fonts/vazir.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* apply globally (temporary !important allowed for test) */
+html, body {
+  font-family: 'vazir', 'Vazir', 'IranYekan', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+
+:root{
+  --color-primary: #C21717;
+  --color-black: #333333;
+  --color-gold: #C59D4A;
+  --color-white: #FFFFFF;
+}
+
+/* بدنۀ صفحه */
+html, body {
+  font-family: 'IranYekan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* دکمه CTA ثابت */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* لایهٔ overlay برای hero برای خوانایی متن */
+.bg-hero-overlay {
+  background: linear-gradient(180deg, rgba(11,11,11,0.65), rgba(11,11,11,0.65));
+}
+
+/* کوچک: استایل‌های کمکی */
+.text-gold { color: var(--color-gold); }
+
+/* پایه کانتینر */
+.container {
+  max-width: 1200px;   /* یا 1100 یا 1280 بسته به طراحی */
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+/* برای موبایل */
+@media (max-width: 640px){
+  .container { padding-left: 12px; padding-right: 12px; }
+}
+
+input[type="text"], input[type="email"], input[type="number"], textarea, select {
+  background: #272727;      /* تیره */
+  color: #ffffff;              /* متن سفید */
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 12px;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #C21717;  /* رنگ قرمز برند */
+  box-shadow: 0 0 0 3px rgba(194,23,23,0.08);
+}
+.btn-primary { /* قبلاً تعریف شده، ولی اگر نه: */
+  background: #C21717;
+  color: #fff;
+  padding: .6rem 1rem;
+  border-radius: 8px;
+  border: none;
+}
+
+/* کارت محصول */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+}
+
+/* کانتینر تصویر با نسبت ثابت (4:3) — پشتیبانی جدید: aspect-ratio */
+.product-card .img-wrap {
+  width: 100%;
+  /* مرورگرهای جدید */
+  aspect-ratio: 4 / 3; 
+  position: relative;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+/*Fallback برای مرورگرهای قدیمی: (اگر میخوای)*/
+/*
+.product-card .img-wrap {
+  padding-top: 75%;  / 4/3 = 75% /
+  position: relative;
+}
+.product-card .img-wrap img {
+  position: absolute;
+  left:0; top:0; width:100%; height:100%;
+}
+*/
+
+.product-card .img-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* مهم: برش مناسب، بدون کشیدگی */
+  object-position: center;
+  transition: transform .25s ease;
+}
+
+/* افکت اختیاری روی hover */
+.product-card .img-wrap img:hover {
+  transform: scale(1.03);
+}
+
+/* محتوای کارت */
+.product-card .card-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* تنظیمات برای موبایل: ارتفاع یا نسبت تغییر کند */
+@media (max-width: 640px) {
+  .product-card .img-wrap { aspect-ratio: 1.5 / 1; } /* کمی بلندتر در موبایل */
+}
+
+/* دکمه برای لینک‌ها — دو نوع: اصلی و ثانویه */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .5rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .12s ease, opacity .12s;
+  border: 1px solid transparent;
+}
+
+/* دکمه اصلی قرمز (اکشن) */
+.btn-primary {
+  background: linear-gradient(180deg,#C21717,#a91512);
+  color: #fff;
+  border-color: rgba(0,0,0,0.15);
+  box-shadow: 0 6px 18px rgba(194,23,23,0.12);
+}
+.btn-primary:hover { transform: translateY(-2px); opacity: .98; }
+
+/* دکمه ثانویه شفاف / تیره */
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: rgba(255,255,255,0.08);
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.03); }
+
+/* حالت کوچک (برای لینک‌هایی که داخل متنند) */
+.btn-sm { padding: .35rem .6rem; font-size: .92rem; border-radius: 6px; }
+
+/* اگر لینک داخل متن قبلا با :hover رنگ عوض میشد، با این کلاس از آن جلوگیری می‌شود */
+a.btn { color: inherit; }
+
+/* محفظه ماشین حساب */
+.calc {
+  background: transparent;
+  padding: .75rem;
+}
+
+/* فیلد قیمت که از DB پر می‌شود */
+.calc .price-field {
+  background: rgba(0,0,0,0.55);   /* تیره‌تر از پس‌زمینه کلی */
+  color: #fff;                    /* متن روشن */
+  padding: .45rem .6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  min-width: 180px;
+  text-align: left;
+  font-weight:700;
+  box-sizing: border-box;
+}
+
+/* اگر readonly باشد نمای مشخص‌تری بده */
+.calc .price-field[readonly] { opacity: 1; }
+
+/* اگر قیمت داخل span است */
+.calc .price-display {
+  display:inline-block;
+  background: rgba(255,255,255,0.06); /* کنتراست متفاوت */
+  color: #fff;
+  padding: .45rem .6rem;
+  border-radius: 8px;
+  font-weight:700;
+}
+
+/* placeholder یا input عادی که کاربر می‌تواند وارد کند */
+.calc input[type="number"], .calc input[type="text"] {
+  background: rgba(255,255,255,0.03);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: .45rem .6rem;
+}
+
+/* wrapper قاب تصویر محصول */
+.product-image-card {
+  width: 100%;
+  max-width: 420px;        /* اندازه مناسب روی دسکتاپ */
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+/* ثابت نگه داشتن نسبت تصویر (16:11 مثلا) و سازگار با موبایل */
+.product-image-card .img-frame {
+  width: 100%;
+  aspect-ratio: 16 / 11;   /* یا 4/3 یا هر نسبتی که می‌پسندی */
+  display: block;
+  background: #111;        /* placeholder background */
+}
+
+/* عنصر تصویر واقعی */
+.product-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* مهم: تصویر تمام قاب رو پر کنه */
+  display: block;
+}
+
+/* اندازه‌ها برای موبایل */
+@media (max-width: 640px) {
+  .product-image-card { max-width: 100%; }
+  .product-image-card .img-frame { aspect-ratio: 4/3; }
+}
+
+/* PRODUCT DETAIL: image left, large, slightly tilted */
+.product-detail-inner{
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+/* image container (about half width on desktop) */
+.product-image-wrapper{
+  width: 50%;
+  max-width: 60%;
+  min-width: 320px;
+  transform: translateX(-2%) rotate(-2deg); /* کمی مایل به چپ و offset */
+  transition: transform .25s ease, box-shadow .2s ease;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+}
+
+/* تصویر داخل قاب */
+.product-image{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 3; /* تنظیم نسبت؛ برحسب نیاز تغییر بده */
+  transform: translateX(0) rotate(0); /* تصویر خودش صاف باشه، قاب مایل */
+}
+
+/* info panel (سمت راست) */
+.product-info{
+  width: 48%;
+  max-width: 48%;
+  min-width: 300px;
+  color: var(--text);
+  padding: 6px 4px;
+}
+
+/* حالت موبایل: تصویر بالای متن و تمام عرض */
+@media (max-width: 900px){
+  .product-detail-inner{
+    flex-direction: column;
+    gap: 18px;
+  }
+  .product-image-wrapper{
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    transform: translateX(0) rotate(0); /* برداشتن چرخش در موبایل برای خوانایی */
+    border-radius: 10px;
+  }
+  .product-info{
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* کوچک‌نمایی لطیف هنگام هاور (دسکتاپ) */
+@media (min-width: 901px){
+  .product-image-wrapper:hover{
+    transform: translateX(-4%) rotate(-1.2deg) scale(1.01);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.55);
+  }
+}
+
+/* دسترسی و خوانایی */
+.product-title{ font-size: 1.8rem; margin: 0 0 8px 0; font-weight:700; }
+.product-price{ font-size: 1.25rem; color: var(--accent-red); margin-bottom: 12px; }
+.product-desc{ color: rgba(255,255,255,0.9); line-height:1.6; }
+
+/* در صورت RTL اگر خواستی تصویر همیشه سمت چپ باشه */
+html[dir="rtl"] .product-detail-inner{
+  direction: ltr; /* force layout ltr to keep image on left */
+}
+
+/* ===== Calculator: contrast & price styles ===== */
+/* از متغیرهای پالت پروژه استفاده شده (در صورت نبودن، مقادیر پیش‌فرض درج شده) */
+:root{
+  --site-bg-dark: #212121;
+  --site-bg-mid: #626262;
+  --accent-red: #C21717;
+  --accent-gold: #C59D4A;
+  --text-dark: #212121;
+  --text-light: #ffffff;
+}
+
+/* ظرف اصلی صفحه ماشین‌حساب */
+.calculator {
+  background: transparent; /* یا رنگ مورد نظر صفحه */
+  color: var(--text-dark);
+  font-family: "vazir", sans-serif;
+}
+
+/* حالت تیره اگر لازم باشه (مثلاً .calculator.dark روی body یا wrapper اضافه کنید) */
+.calculator.dark {
+  color: var(--text-light);
+  background: var(--site-bg-dark);
+}
+
+/* نمایش قیمت برجسته */
+.calculator .price-display,
+.calculator .price-badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06); /* کمی بک‌گراند برای خوانایی */
+  color: var(--text-dark);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* وقتی صفحه تیره است، متن قیمت سفید بشه */
+.calculator.dark .price-display,
+.calculator.dark .price-badge {
+  color: var(--text-light) !important;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* فیلدهای readonly و ورودی قیمت در ماشین‌حساب */
+.calculator input.price-field,
+.calculator input[readonly].price-field,
+.calculator .readonly-price {
+  color: var(--text-dark) !important;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* حالت تیره برای فیلد */
+.calculator.dark input.price-field,
+.calculator.dark input[readonly].price-field,
+.calculator.dark .readonly-price {
+  color: var(--text-light) !important;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* placeholder و disabled */
+.calculator input::placeholder { color: rgba(0,0,0,0.45); }
+.calculator.dark input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* حذف فلش‌های عددی در input[type=number] (cross-browser) */
+.calculator input[type=number]::-webkit-outer-spin-button,
+.calculator input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.calculator input[type=number] { -moz-appearance:textfield; }
+
+/* در صورت نیاز به badge واحد (مثلاً kg/branch) */
+.calculator .unit-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  vertical-align: middle;
+}
+
+/* ===== Fix: make price input text readable (high-specificity, minimal visual change) ===== */
+
+/* پایه — هدف‌گیری دقیق روی فیلد قیمت */
+#price,
+input.price-input,
+input[name="price"] {
+  color: #121212 !important;           /* متن تیره و قابل‌خواندن */
+  opacity: 1 !important;               /* بعضی سِت‌ها opacity کم میذارن */
+}
+
+/* placeholder خواناتر */
+#price::placeholder,
+input.price-input::placeholder,
+input[name="price"]::placeholder {
+  color: rgba(0,0,0,0.45) !important;
+}
+
+/* وقتی فیلد readonly یا disabled هست (حالتِ معمولِ ما) */
+#price[readonly],
+input.price-input[readonly],
+input[name="price"][readonly],
+#price:disabled,
+input.price-input:disabled,
+input[name="price"]:disabled {
+  color: #121212 !important;           /* متن خوانا حتی در حالت readonly/disabled */
+  opacity: 1 !important;
+  /* اگر می‌خواهی پس‌زمینه را هم یک مقدار روشن‌تر کنی می‌توانی این را فعال کنی:
+     background-color: #fafafa !important;
+  */
+  cursor: not-allowed;
+}
+
+/* همچنین اطمینان از نمایش صحیح strong#price-display (text outside input) */
+#price-display,
+.calculator .price-display {
+  color: #f5f5f5; /* اگر می‌خواهی این خط را نادیده بگیری / تغییر بدی؛ مقدار را به دلخواه ست کن */
+}
+
+/* اگر Tailwind یا کلاس text-white روی input اعمال شده، selector بالا با !important آن را بازنویسی می‌کند */

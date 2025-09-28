@@ -1,51 +1,129 @@
+{% load static %}
+{% load humanize %}
 <!doctype html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
+<main class="container">
 <head>
+  <link rel="preload" href="{% static 'fonts/vazir.woff2' %}" as="font" type="font/woff2" crossorigin>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>{% block title %}BFGWebSite{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}ویترین آهن‌آلات - قیمت لحظه‌ای{% endblock %}">
 
-  <!-- Title (only one block with name "title") -->
-  <title>{% block title %}{{ site_settings.site_name|default:"BFGWebSite" }}{% endblock %}</title>
-
-  <!-- Meta description (override in child templates) -->
-  <meta name="description" content="{% block meta_description %}{{ site_settings.meta_default_description|default:'' }}{% endblock %}">
-
-  <!-- Canonical -->
-  <link rel="canonical" href="{{ request.build_absolute_uri }}">
-
-  <!-- Open Graph title (separate block, independent of `title`) -->
-  <meta property="og:locale" content="fa_IR" />
-  <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
-  <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name|default:"BFGWebSite" }}{% endblock %}" />
-  <meta property="og:description" content="{% block og_description %}{{ site_settings.meta_default_description|default:'' }}{% endblock %}" />
-
-  {% block extra_head %}{% endblock %}
-  <!-- Google Analytics 4 -->
-  {% if GA_MEASUREMENT_ID %}
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_MEASUREMENT_ID }}"></script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '{{ GA_MEASUREMENT_ID }}');
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#C21717', blackbase: '#0B0B0B', gold: '#C59D4A' },
+          fontFamily: { iranyekan: ['Vazirmatn','IranYekan','sans-serif'] }
+        }
+      }
+    }
   </script>
-  {% endif %}
+
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% block head_extra %}{% endblock %}
+  <!-- in head or before </body> -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- Tom Select CSS + JS (CDN) -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </head>
-<body>
-  <header>
-    <h1><a href="{% url 'core:home' %}">{{ site_settings.site_name|default:"BFGWebSite" }}</a></h1>
-    <nav>
-      <a href="{% url 'products:category_list' %}">محصولات</a> |
-      <a href="{% url 'blog:blog_list' %}">بلاگ</a> |
-      <a href="{% url 'core:about' %}">درباره ما</a> |
-      <a href="{% url 'core:contact' %}">تماس</a>
-    </nav>
+<body class="bg-blackbase text-white antialiased">
+<body style="font-family: 'vazir', 'iranyekan', sans-serif !important;">
+<body class="site-bg">
+  <div class="main-wrapper">
+    <!-- بقیه محتوا -->
+
+
+  <!-- HEADER -->
+  <header class="bg-blackbase border-b border-gray-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <div class="flex items-center gap-4">
+        <a href="{% url 'core:home' %}" class="flex items-center">
+          <img src="{% static 'images/logo.svg' %}" alt="BFG" class="h-10">
+        </a>
+        <!-- NAV -->
+        <nav class="hidden md:flex gap-4">
+          <a href="{% url 'core:home' %}" class="text-gray-300 hover:text-white">خانه</a>
+          <a href="{% url 'products:category_list' %}" class="text-gray-300 hover:text-white">محصولات</a>
+          <a href="{% url 'news:list' %}" class="text-gray-300 hover:text-white">اخبار</a>
+          <a href="{% url 'blog:blog_list' %}" class="text-gray-300 hover:text-white">بلاگ</a>
+          <a href="{% url 'products:calculator' %}" class="text-gray-300 hover:text-white">ماشین‌حساب</a>
+          <a href="{% url 'products:alert_create' %}" class="text-gray-300 hover:text-white">هشدار قیمت</a>
+          <a href="{% url 'contacts:contact' %}" class="text-gray-300 hover:text-white">تماس با ما</a>
+        </nav>
+      </div>
+
+      <!-- SEARCH FORM -->
+      <div class="flex-1 px-4 hidden md:block">
+        <form id="global-search-form" method="get" action="{% url 'products:search' %}" class="relative">
+          <input name="q" id="global-search" type="search" placeholder="جستجو: تیراهن، میلگرد، نبشی..." aria-label="search"
+            class="w-full rounded-md bg-gray-900 placeholder-gray-400 py-2 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary">
+          <button type="submit" class="absolute inset-y-0 left-0 mr-2 flex items-center px-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+            </svg>
+          </button>
+          <div id="autocomplete-box" class="absolute left-0 right-0 mt-10 bg-white text-black rounded-md shadow-lg hidden overflow-hidden z-50"></div>
+        </form>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="tel:09120000000" class="hidden sm:inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md">تماس فوری</a>
+        <button id="mobile-search-toggle" class="md:hidden p-2 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
+        </button>
+        <button id="mobile-menu-btn" class="p-2 rounded-md md:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- mobile search input -->
+    <div id="mobile-search-panel" class="md:hidden px-4 pb-4 hidden">
+      <form method="get" action="{% url 'products:search' %}">
+        <input name="q" id="global-search-mobile" type="search" placeholder="جستجو..." class="w-full rounded-md bg-gray-900 placeholder-gray-400 py-2 px-3">
+      </form>
+    </div>
   </header>
+
   <main>
     {% block content %}{% endblock %}
   </main>
-  <footer>
-    <p>{{ site_settings.phone }} | {{ site_settings.address }}</p>
+
+  <footer class="bg-blackbase border-t border-gray-800 text-gray-300 mt-12">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <img src="{% static 'images/logo-white.svg' %}" alt="BFG" class="h-8 mb-4">
+        <p class="text-sm">ویترین آهن‌آلات در شادآباد — قیمت لحظه‌ای و مشاوره تلفنی</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-white mb-2">تماس</h4>
+        <div class="text-sm">آدرس: شادآباد</div>
+        <div class="text-sm">تلفن: <a href="tel:09120000000" class="text-primary">0912-000-0000</a></div>
+      </div>
+      <div>
+        <h4 class="font-bold text-white mb-2">دسترسی سریع</h4>
+        <ul class="text-sm space-y-2">
+          <li><a href="{% url 'products:category_list' %}">محصولات</a></li>
+          <li><a href="{% url 'news:list' %}">اخبار</a></li>
+          <li><a href="{% url 'contacts:contact' %}">تماس با ما</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-gray-500 py-4">© {{ now|date:"Y" }} BFGWebSite</div>
   </footer>
+
+  <!-- SCRIPTS -->
+  <script src="{% static 'js/search-autocomplete.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+  </div>
 </body>
 </html>
+</main>

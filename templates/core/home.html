@@ -1,27 +1,98 @@
-{% extends "base.html" %}
-{% block title %}خانه - BFGWebSite{% endblock %}
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}خانه — BFGWebSite{% endblock %}
 {% block content %}
-<h1>خوش آمدید به BFGWebSite</h1>
+<section class="relative">
+  <div class="bg-[linear-gradient(180deg,#0b0b0b_0%,rgba(0,0,0,0.6)_100%)]">
+    <div class="max-w-7xl mx-auto px-4 py-20 lg:py-28 flex flex-col lg:flex-row items-center gap-8">
+      <div class="lg:w-1/2">
+        <h1 class="text-4xl lg:text-5xl font-bold leading-tight">بزرگ‌ترین ویترین آهن‌آلات در شادآباد</h1>
+        <p class="mt-4 text-gray-300 max-w-lg">قیمت لحظه‌ای، مشاوره تلفنی و ارسال سریع — استعلام و سفارش با یک تماس.</p>
+        <div class="mt-6 flex gap-3">
+          <a href="tel:09120000000" class="btn-primary inline-flex items-center gap-2">تماس فوری</a>
+          <a href="{% url 'products:category_list' %}" class="px-4 py-2 rounded-md border border-primary text-primary">مشاهده محصولات</a>
+        </div>
+      </div>
 
-<section>
-  <h2>قیمت روز محصولات</h2>
-  <ul>
-    {% for p in products %}
-      <li>
-        <a href="{{ p.get_absolute_url }}">{{ p.name }}</a> — {{ p.current_price }} تومان
-      </li>
-    {% empty %}
-      <li>فعلاً محصولی موجود نیست.</li>
-    {% endfor %}
-  </ul>
+      <div class="lg:w-1/2 w-full">
+        <div class="w-full h-64 lg:h-72 bg-gradient-to-r from-gray-800 via-blackbase to-gray-900 rounded-md overflow-hidden flex items-center justify-center">
+          {% if site_hero_image %}
+            <img src="{{ site_hero_image.url }}" alt="hero" class="object-cover w-full h-full mix-blend-overlay hidden lg:block">
+          {% else %}
+            <div class="text-center text-gray-400">تصویر انبار / محصولات</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section>
-  <h2>آخرین مقالات</h2>
-  <ul>
-    {% for post in posts %}
-      <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+<section id="products" class="max-w-7xl mx-auto px-4 py-8">
+  <div class="bg-gray-900 p-4 rounded-md flex flex-col md:flex-row items-center gap-3">
+    <form method="get" action="{% url 'products:search' %}" class="flex w-full gap-2">
+      <input name="q" type="search" placeholder="جستجو محصولات، مقالات، اخبار..." class="w-full rounded-md bg-blackbase py-2 px-3">
+      <button class="px-4 py-2 rounded-md bg-primary text-white">جستجو</button>
+    </form>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 py-6">
+  <h2 class="text-2xl font-bold mb-4">محصولات پرفروش</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for product in products %}
+    <article class="bg-white text-black rounded-md overflow-hidden shadow-sm">
+      <a href="{{ product.get_absolute_url }}" class="block">
+        <div class="product-card">
+  <div class="img-wrap">
+    {% if product.image %}
+      <img 
+        src="{{ product.image.url }}" 
+        alt="{{ product.name }}" 
+        loading="lazy"
+        width="800" height="600"   <!-- حتماً مقادیر واقعی یا نزدیک قرار بدید -->
+      >
+    {% else %}
+      <img 
+        src="{% static 'images/product-placeholder.jpg' %}" 
+        alt="محصول تصویر ندارد" 
+        loading="lazy"
+        width="800" height="600"
+      >
+    {% endif %}
+  </div>
+
+        <div class="p-3">
+          <h3 class="font-bold text-lg">{{ product.name }}</h3>
+          <div class="text-sm text-gray-600">
+            {% if product.category %}
+              {{ product.category.name }}
+            {% endif %}
+          </div>
+          <div class="mt-2 text-primary font-semibold">{{ product.current_price|intcomma }} <span class="text-xs">ریال / {{ product.unit }}</span></div>
+        </div>
+      </a>
+      <div class="p-3 border-t border-gray-100 flex gap-2">
+        <a href="{{ product.get_absolute_url }}#alert-form" class="flex-1 text-center py-2 border border-primary rounded-md text-primary">ثبت هشدار</a>
+        <a href="{% url 'products:calculator' %}?product={{ product.slug }}" class="flex-1 text-center py-2 bg-primary text-white rounded-md">ماشین‌حساب</a>
+      </div>
+    </article>
+    {% empty %}
+      <p class="text-gray-400">فعلاً محصولی موجود نیست.</p>
     {% endfor %}
-  </ul>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 py-10">
+  <h2 class="text-2xl font-bold mb-4">اخبار و مقالات</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for item in recent_news %}
+    <div class="bg-white text-black rounded-md overflow-hidden p-4">
+      <h3 class="font-bold">{{ item.title }}</h3>
+      <p class="text-sm mt-2 text-gray-700">{{ item.summary|truncatechars:120 }}</p>
+      <a href="{{ item.get_absolute_url }}" class="text-primary mt-3 block">بیشتر بخوانید</a>
+    </div>
+    {% endfor %}
+  </div>
 </section>
 {% endblock %}

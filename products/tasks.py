@@ -4,8 +4,11 @@ import logging
 import requests
 from celery import shared_task
 from django.conf import settings
-from .utils import import_prices_from_csv_content
+from products.utils.common import import_prices_from_csv_content
 from .notifications import send_price_alerts_for_product  # see below or simple impl
+from django.core.mail import send_mail
+from .models import PriceAlert
+
 
 logger = logging.getLogger(__name__)
 
@@ -59,3 +62,32 @@ def check_price_alerts(self):
         except Exception as e:
             logger.exception("Error checking alert id=%s: %s", a.id, e)
     return {'checked': checked, 'notified': notified}
+
+# products/tasks.py (بعد از ارسال ایمیل)
+from products.utils.analytics import send_ga_event
+
+@shared_task
+def notify_price_alert(alert_id):
+    alert = PriceAlert.objects.get(pk=alert_id)
+    # حالا امن از alert استفاده کن
+    send_ga_event('price_alert_sent', {
+        'product_id': alert.product.slug,
+        'target_price': float(alert.target_price),
+        'success': True,
+        'method': alert.contact_method,
+    })
+
+@shared_task
+def send_alert_confirmation_email(alert_id):
+    alert = PriceAlert.objects.get(pk=alert_id)
+    subject = f'تأیید ثبت هشدار برای {alert.product.name}'
+    message = f'هشدار قیمت برای محصول {alert.product.name} با قیمت هدف {alert.target_price} ریال ثبت شد.'
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [alert.contact], fail_silently=False)
+    return True
+
+def send_alert_confirmation_email_sync(alert_id):
+    alert = PriceAlert.objects.get(pk=alert_id)
+    subject = f'تأیید ثبت هشدار برای {alert.product.name}'
+    message = f'هشدار قیمت برای محصول {alert.product.name} با قیمت هدف {alert.target_price} ریال ثبت شد.'
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [alert.contact], fail_silently=False)
+    return True

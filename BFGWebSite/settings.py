@@ -32,9 +32,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", 'dev-secret')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'django.contrib.humanize',
     'core',
     'products',
     'blog',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_crontab',
     'meta',
+    'news',
 ]
 
 MIDDLEWARE = [
@@ -93,16 +95,21 @@ WSGI_APPLICATION = 'BFGWebSite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+load_dotenv()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PG_DATABASE'),
-        'USER': os.getenv('PG_USER'),
-        'PASSWORD': os.getenv('PG_PASSWORD'),
-        'HOST': os.getenv('PG_HOST', 'localhost'),
-        'PORT': os.getenv('PG_PORT', '5432'),
+        'NAME': os.getenv('PG_DATABASE','bfg_db'),
+        'USER': os.getenv('PG_USER','bfg_user'),
+        'PASSWORD': os.getenv('PG_PASSWORD','pgadminparsa'),
+        'HOST': os.getenv('PG_HOST','127.0.0.1'),
+        'PORT': os.getenv('PG_PORT','5432'),
     }
 }
+
+# اگر نیاز به SSL برای managed DB داری (مثلاً RDS) می‌تونی اضافه کنی:
+if os.environ.get('PG_SSLMODE'):
+    DATABASES['default'].setdefault('OPTIONS', {})['sslmode'] = os.environ['PG_SSLMODE']
 
 
 # Password validation
@@ -137,6 +144,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

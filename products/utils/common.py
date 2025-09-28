@@ -3,7 +3,7 @@ import csv
 from io import StringIO
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
-from .models import Product, PriceHistory
+from products.models import Product, PriceHistory
 import logging
 
 logger = logging.getLogger(__name__)

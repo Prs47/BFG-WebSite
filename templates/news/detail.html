@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ news.title }} — {{ block.super }}{% endblock %}
+{% block head_extra %}
+  <meta name="description" content="{{ news.summary|default:news.content|truncatechars:160 }}" />
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <article class="bg-white text-black rounded-md p-6">
+    <h1 class="text-2xl font-bold mb-2">{{ news.title }}</h1>
+    <div class="text-xs text-gray-500 mb-4">{{ news.published_at|date:"Y-m-d H:i" }}</div>
+    {% if news.image %}
+      <img src="{{ news.image.url }}" alt="{{ news.title }}" class="w-full h-auto mb-4 object-cover rounded-md">
+    {% endif %}
+    <div class="prose lg:prose-xl max-w-none text-gray-800">
+      {{ news.content|safe }}
+    </div>
+
+    <div class="mt-6">
+      <a href="{% url 'news:list' %}" class="text-primary">بازگشت به اخبار</a>
+    </div>
+  </article>
+</div>
+{% endblock %}

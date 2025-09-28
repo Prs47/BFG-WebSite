@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}نتایج جستجو: {{ query }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-xl font-bold mb-4">نتایج جستجو برای «{{ query }}»</h1>
+
+  <section>
+    <h2 class="font-semibold mb-2">محصولات</h2>
+    {% if results.products %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for p in results.products %}
+          <div class="bg-white text-black rounded-md p-4">
+            <a href="{{ p.get_absolute_url }}"><h3 class="font-bold">{{ p.name }}</h3></a>
+            <div class="text-sm text-gray-600">{{ p.short_description|default:''|truncatechars:120 }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-400">محصولی یافت نشد.</p>
+    {% endif %}
+  </section>
+
+  <section class="mt-6">
+    <h2 class="font-semibold mb-2">اخبار</h2>
+    {% if results.news %}
+      <ul class="space-y-3">
+        {% for n in results.news %}
+          <li class="bg-white text-black rounded-md p-3">
+            <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-gray-400">موردی یافت نشد.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -31,5 +31,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(PriceAlert)
 class PriceAlertAdmin(admin.ModelAdmin):
-    list_display = ('product','contact','contact_method','target_price','active','notified','created_at')
-    list_filter = ('active','notified','contact_method')
+    list_display = ('id', 'product', 'contact', 'target_price', 'active', 'notified', 'created_at')
+    list_filter = ('active', 'notified')
+    search_fields = ('contact', 'product__name', 'product__slug')

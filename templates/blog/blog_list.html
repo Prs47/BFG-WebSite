@@ -1,7 +1,36 @@
 {% extends "base.html" %}
 {% block title %}بلاگ - BFGWebSite{% endblock %}
 {% block content %}
-<h1>بلاگ</h1>
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">بلاگ</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% for post in posts %}
+    <article class="bg-[#161616] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+      <a href="{% url 'blog:post_detail' post.slug %}" class="block">
+        {% if post.featured_image %}
+          <div class="h-40 overflow-hidden">
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">
+          </div>
+        {% endif %}
+        <div class="p-4">
+          <h2 class="text-lg font-bold text-white mb-2">{{ post.title }}</h2>
+          <p class="text-sm text-gray-400 mb-3 line-clamp-3">{{ post.excerpt|default:post.content|truncatechars:140 }}</p>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-500">{{ post.published_at|date:"Y/m/d" }}</div>
+            <div>
+              <a href="{% url 'blog:post_detail' post.slug %}" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-transparent border border-gray-700 text-gray-200 hover:bg-gray-800 transition">
+                خواندن ادامه
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </a>
+    </article>
+  {% endfor %}
+</div>
+
 <ul>
   {% for post in posts %}
     <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a> — {{ post.published_at|date:"Y/m/d" }}</li>

@@ -21,6 +21,7 @@ from blog.sitemaps import BlogSitemap
 from products.sitemaps import ProductSitemap, CategorySitemap
 from django.conf import settings
 from django.conf.urls.static import static
+from BFGWebSite.health.views import health
 
 sitemaps = {
     'products': ProductSitemap,
@@ -34,8 +35,12 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),
     path('blog/', include('blog.urls', namespace='blog')),
     path('contact/', include('contacts.urls', namespace='contacts')),
+    path('news/', include('news.urls', namespace='news')),
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("healthz/", health, name="healthz"),
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # from django.contrib import admin
 # from django.urls import path, include

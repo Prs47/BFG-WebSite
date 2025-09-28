@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}اخبار — {{ block.super }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">اخبار</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% for item in news_list %}
+      <article class="bg-white text-black rounded-md overflow-hidden">
+        <a href="{{ item.get_absolute_url }}" class="block">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-48 object-cover">
+          {% else %}
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-600">بدون تصویر</div>
+          {% endif %}
+          <div class="p-4">
+            <h2 class="font-bold text-lg">{{ item.title }}</h2>
+            <p class="text-sm text-gray-600 mt-2">{{ item.summary|default:item.content|truncatechars:140 }}</p>
+            <div class="text-xs text-gray-500 mt-2">{{ item.published_at|date:"Y-m-d H:i" }}</div>
+          </div>
+        </a>
+      </article>
+    {% empty %}
+      <p class="text-gray-400">فعلاً خبری منتشر نشده است.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
