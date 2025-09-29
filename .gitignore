@@ -1,8 +1,31 @@
-node_modules
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
 .venv/
-.env
-.DS_Store
+venv/
+*.egg-info/
+dist/
+node_modules/
+npm-debug.log
+yarn-error.lo
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
 media/
 staticfiles/
+
+# IDEs / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Env
+.env
