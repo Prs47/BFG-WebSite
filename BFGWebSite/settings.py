@@ -32,9 +32,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", 'dev-secret')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,bamfg.ir,www.bamfg.ir').split(',')
 
 
 # Application definition
@@ -99,10 +99,10 @@ load_dotenv()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PG_DATABASE','bfg_db'),
-        'USER': os.getenv('PG_USER','bfg_user'),
-        'PASSWORD': os.getenv('PG_PASSWORD','pgadminparsa'),
-        'HOST': os.getenv('PG_HOST','127.0.0.1'),
+        'NAME': os.getenv('PG_DATABASE'),
+        'USER': os.getenv('PG_USER'),
+        'PASSWORD': os.getenv('PG_PASSWORD'),
+        'HOST': os.getenv('PG_HOST'),
         'PORT': os.getenv('PG_PORT','5432'),
     }
 }
