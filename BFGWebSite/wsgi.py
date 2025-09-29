@@ -8,9 +8,13 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
 import os
-
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
 from django.core.wsgi import get_wsgi_application
+from whitenoise import WhiteNoise
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BFGWebSite.settings')
 
 application = get_wsgi_application()
+
+application = WhiteNoise(application, root=str(BASE_DIR / 'staticfiles'))
