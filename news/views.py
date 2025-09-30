@@ -10,3 +10,4 @@ def news_list(request):
 def news_detail(request, slug):
     obj = get_object_or_404(News, slug=slug, is_published=True)
     return render(request, 'news/detail.html', {'news': obj})
+
