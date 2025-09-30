@@ -85,13 +85,7 @@
 
 <section class="max-w-7xl mx-auto px-4 py-10">
   <h2 class="text-2xl font-bold mb-4">اخبار و مقالات</h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    {% comment %} {% for item in recent_news %}
-    <div class="bg-white text-black rounded-md overflow-hidden p-4">
-      <h3 class="font-bold">{{ item.title }}</h3>
-      <p class="text-sm mt-2 text-gray-700">{{ item.summary|truncatechars:120 }}</p>
-      <a href="{{ item.get_absolute_url }}" class="text-primary mt-3 block">بیشتر بخوانید</a>
-    </div> {% endcomment %}
+  
     {% endfor %}
   </div>
 </section>
