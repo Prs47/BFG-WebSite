@@ -49,16 +49,7 @@
           <img src="{% static 'images/logo.svg' %}" alt="BFG" class="h-10">
         </a>
         <!-- NAV -->
-        <nav class="hidden md:flex gap-4">
-          <a href="{% url 'core:home' %}" class="text-gray-300 hover:text-white">خانه</a>
-          <a href="{% url 'products:category_list' %}" class="text-gray-300 hover:text-white">محصولات</a>
-          <a href="{% url 'news:list' %}" class="text-gray-300 hover:text-white">اخبار</a>
-          <a href="{% url 'blog:blog_list' %}" class="text-gray-300 hover:text-white">بلاگ</a>
-          <a href="{% url 'products:calculator' %}" class="text-gray-300 hover:text-white">ماشین‌حساب</a>
-          <a href="{% url 'products:alert_create' %}" class="text-gray-300 hover:text-white">هشدار قیمت</a>
-          <a href="{% url 'contacts:contact' %}" class="text-gray-300 hover:text-white">تماس با ما</a>
-        </nav>
-      </div>
+         <script src="{% static 'js/navbar.js' %}"></script>
 
       <!-- SEARCH FORM -->
       <div class="flex-1 px-4 hidden md:block">

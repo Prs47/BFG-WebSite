@@ -5,7 +5,7 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
   <h1 class="text-2xl font-bold mb-4">اخبار</h1>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {% for item in news_list %}
+    {% for item in news:news_list %}
       <article class="bg-white text-black rounded-md overflow-hidden">
         <a href="{{ item.get_absolute_url }}" class="block">
           {% if item.image %}
