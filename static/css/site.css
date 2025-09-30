@@ -484,8 +484,3 @@ input[name="price"]:disabled {
 }
 
 /* اگر Tailwind یا کلاس text-white روی input اعمال شده، selector بالا با !important آن را بازنویسی می‌کند */
-
-/* static/css/site.css (اضافه کن) */
-.hidden { display: none; }
-.mobile-menu { /* style for mobile menu */ position: absolute; top: 56px; left: 0; right: 0; background: white; z-index: 50; }
-/* ... واکنش‌گرا سازی ... */

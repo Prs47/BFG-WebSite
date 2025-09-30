@@ -1,40 +1,0 @@
-<!-- templates/includes/navbar.html -->
-<nav class="site-nav">
-  <div class="nav-inner">
-    <a class="brand" href="{% url 'home' %}">BFG</a>
-
-    <!-- hamburger -->
-    <button id="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="باز/بستن منو">
-      <span class="hamburger-icon">☰</span>
-    </button>
-
-    <!-- search toggle -->
-    <button id="search-toggle" aria-expanded="false" aria-controls="mobile-search" aria-label="جستجو">
-      🔍
-    </button>
-
-    <!-- desktop menu -->
-    <div class="menu-desktop">
-      <!-- links -->
-    </div>
-  </div>
-
-  <!-- mobile menu (initially hidden) -->
-  <div id="mobile-menu" class="mobile-menu hidden" role="menu" aria-hidden="true">
-    <a href="{% url 'core:home' %}" class="text-gray-300 hover:text-white">خانه</a>
-    <a href="{% url 'products:category_list' %}" class="text-gray-300 hover:text-white">محصولات</a>
-    <a href="{% url 'news:list' %}" class="text-gray-300 hover:text-white">اخبار</a>
-    <a href="{% url 'blog:blog_list' %}" class="text-gray-300 hover:text-white">بلاگ</a>
-    <a href="{% url 'products:calculator' %}" class="text-gray-300 hover:text-white">ماشین‌حساب</a>
-    <a href="{% url 'products:alert_create' %}" class="text-gray-300 hover:text-white">هشدار قیمت</a>
-    <a href="{% url 'contacts:contact' %}" class="text-gray-300 hover:text-white">تماس با ما</a>
-  </div>
-
-  <!-- mobile search overlay -->
-  <div id="mobile-search" class="mobile-search hidden" aria-hidden="true">
-    <form method="get" action="{% url 'product_search_page' %}">
-      <input id="mobile-search-input" name="q" placeholder="جستجوی محصول..." autocomplete="off" />
-      <button type="submit">جستجو</button>
-    </form>
-  </div>
-</nav>
