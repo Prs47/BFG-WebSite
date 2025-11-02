@@ -204,3 +204,16 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 GA_MEASUREMENT_ID = os.getenv('GA_MEASUREMENT_ID', '')
 GA_API_SECRET = os.getenv('GA_API_SECRET', '')
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://bamfg.ir",
+    "https://www.bamfg.ir",
+    "https://your-app.runflare.run",
+]
+
+# اگر پشت پروکسی/‌reverse-proxy هستی (معمولاً لازم است)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# تنظیمات امنیتی پیشنهادی (پس از راه‌اندازی https):
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
