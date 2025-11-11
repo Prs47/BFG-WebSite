@@ -208,7 +208,7 @@ GA_API_SECRET = os.getenv('GA_API_SECRET', '')
 CSRF_TRUSTED_ORIGINS = [
     "https://bamfg.ir",
     "https://www.bamfg.ir",
-    "https://your-app.runflare.run",
+    "http://bfgwebsite.runflare.run",
 ]
 
 # اگر پشت پروکسی/‌reverse-proxy هستی (معمولاً لازم است)
